@@ -1,0 +1,4 @@
+name: ShiroCore
+version: '1.0.0'
+main: net.thanachot.ShiroCore.ShiroCore
+api-version: '1.21'

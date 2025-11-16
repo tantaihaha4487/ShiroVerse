@@ -16,13 +16,6 @@
     <name>Shiro Core (plugin)</name>
 
     <dependencies>
-        <!-- depend on the API module built in the same reactor -->
-        <dependency>
-            <groupId>net.thanachot</groupId>
-            <artifactId>ShiroAPI</artifactId>
-            <!-- version inherited from parent -->
-        </dependency>
-
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>

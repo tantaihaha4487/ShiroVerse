@@ -1,4 +1,4 @@
-package net.thanachot.shiroverse.api.event;
+package net.thanachot.ShiroCore.api.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

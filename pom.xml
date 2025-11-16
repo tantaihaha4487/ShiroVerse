@@ -9,7 +9,6 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>ShiroAPI</module>
         <module>ShiroCore</module>
     </modules>
 
@@ -25,15 +24,6 @@
 
     </repositories>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>net.thanachot</groupId>
-                <artifactId>ShiroAPI</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

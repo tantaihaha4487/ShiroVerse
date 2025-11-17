@@ -1,5 +1,6 @@
 package net.thanachot.ShiroCore.system;
 
+import net.thanachot.ShiroCore.api.ShiftActivation;
 import net.thanachot.ShiroCore.handler.ShiftActivationHandler;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -14,36 +15,22 @@ import java.util.Set;
  * Internal service that manages the registration of listenable items and their corresponding handlers.
  * This class is not intended for public use.
  */
-public class ShiftActivationService {
+public class ShiftActivationService implements ShiftActivation {
 
     private final Map<Material, ShiftActivationHandler> listenableItems = new HashMap<>();
 
-    /**
-     * Registers a material to be listened for shift activation with a specific handler.
-     *
-     * @param material The material to register.
-     * @param handler  The handler to be executed on activation.
-     */
-    public void registerListenableItem(@NotNull Material material, @NotNull ShiftActivationHandler handler) {
+    @Override
+    public void register(@NotNull Material material, @NotNull ShiftActivationHandler handler) {
         listenableItems.put(material, handler);
     }
 
-    /**
-     * Unregisters a material from being listened for shift activation.
-     *
-     * @param material The material to unregister.
-     */
-    public void unregisterListenableItem(@NotNull Material material) {
+    @Override
+    public void unregister(@NotNull Material material) {
         listenableItems.remove(material);
     }
 
-    /**
-     * Checks if a material is registered for shift activation.
-     *
-     * @param material The material to check.
-     * @return true if the material is registered, false otherwise.
-     */
-    public boolean isListenableItem(@NotNull Material material) {
+    @Override
+    public boolean isRegistered(@NotNull Material material) {
         return listenableItems.containsKey(material);
     }
 

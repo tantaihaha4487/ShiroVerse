@@ -108,6 +108,6 @@ public class ShiftActivationListener implements Listener {
     }
 
     private boolean isListenableItem(@NotNull ItemStack item) {
-        return shiftActivationService.isListenableItem(item.getType());
+        return shiftActivationService.isRegistered(item.getType());
     }
 }

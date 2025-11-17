@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.api.event;
+package net.thanachot.ShiroCore.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -8,6 +8,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when a player makes progress in a shift-activation sequence.
+ */
 public class ShiftProgressEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -16,7 +19,7 @@ public class ShiftProgressEvent extends Event implements Cancellable {
     private final EquipmentSlot hand;
     private final ItemStack item;
     private boolean cancelled = false;
-    private String actionBarMessage; // null means use default
+    private String message; // null means use default
 
     public ShiftProgressEvent(Player player, int loadingPercentage, EquipmentSlot hand, ItemStack item) {
         this.player = player;
@@ -39,20 +42,58 @@ public class ShiftProgressEvent extends Event implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    /**
+     * Gets the item that was used for the shift-activation.
+     *
+     * @return The item.
+     */
     public ItemStack getItem() {
         return item;
     }
 
+    /**
+     * Gets the hand that triggered this event.
+     *
+     * @return The hand (EquipmentSlot.HAND for main hand, EquipmentSlot.OFF_HAND for off-hand).
+     */
     public EquipmentSlot getHand() {
         return hand;
     }
 
+    /**
+     * Gets the current loading percentage (0-99).
+     *
+     * @return The loading percentage.
+     */
     public int getLoadingPercentage() {
         return loadingPercentage;
     }
 
+    /**
+     * Gets the player who triggered the event.
+     *
+     * @return The player.
+     */
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * Gets the action bar message that will be displayed to the player.
+     *
+     * @return The action bar message.
+     */
+    public String getActionBarMessage() {
+        return message;
+    }
+
+    /**
+     * Sets the action bar message that will be displayed to the player.
+     *
+     * @param message The new message.
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override

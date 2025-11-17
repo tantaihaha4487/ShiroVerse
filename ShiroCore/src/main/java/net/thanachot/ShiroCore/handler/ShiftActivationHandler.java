@@ -1,0 +1,18 @@
+package net.thanachot.ShiroCore.handler;
+
+import net.thanachot.ShiroCore.event.ShiftActivationEvent;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * A functional interface for handling shift activation events for a specific item.
+ */
+@FunctionalInterface
+public interface ShiftActivationHandler {
+
+    /**
+     * Called when a shift activation is successfully completed for a registered item.
+     *
+     * @param event The ShiftActivationEvent.
+     */
+    void onActivate(@NotNull ShiftActivationEvent event);
+}

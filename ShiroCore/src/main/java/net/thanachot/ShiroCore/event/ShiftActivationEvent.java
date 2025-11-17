@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.api.event;
+package net.thanachot.ShiroCore.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -8,7 +8,10 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ShiftActivateEvent extends Event implements Cancellable {
+/**
+ * Called when a player successfully completes a shift-activation sequence.
+ */
+public class ShiftActivationEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final Player player;
@@ -18,7 +21,7 @@ public class ShiftActivateEvent extends Event implements Cancellable {
     private ItemStack item;
     private boolean cancelled = false;
 
-    public ShiftActivateEvent(Player player, int loadingPercentage, long timestamp, EquipmentSlot hand, ItemStack item) {
+    public ShiftActivationEvent(Player player, int loadingPercentage, long timestamp, EquipmentSlot hand, ItemStack item) {
         this.player = player;
         this.loadingPercentage = loadingPercentage;
         this.timestamp = timestamp;
@@ -30,29 +33,56 @@ public class ShiftActivateEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
+    /**
+     * Gets the player who triggered the event.
+     *
+     * @return The player.
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Gets the final loading percentage, which should be 100.
+     *
+     * @return The loading percentage.
+     */
     public int getLoadingPercentage() {
         return loadingPercentage;
     }
 
+    /**
+     * Gets the timestamp of when the event occurred.
+     *
+     * @return The timestamp.
+     */
     public long getTimestamp() {
         return timestamp;
     }
 
     /**
-     * Which hand triggered this event (EquipmentSlot.HAND = main hand, OFF_HAND = off-hand).
+     * Gets the hand that triggered this event.
+     *
+     * @return The hand (EquipmentSlot.HAND for main hand, EquipmentSlot.OFF_HAND for off-hand).
      */
     public EquipmentSlot getHand() {
         return hand;
     }
 
+    /**
+     * Gets the item that was used for the shift-activation.
+     *
+     * @return The item.
+     */
     public ItemStack getItem() {
         return item;
     }
 
+    /**
+     * Sets the item in the player's hand.
+     *
+     * @param item The new item.
+     */
     public void setItem(ItemStack item) {
         this.item = item;
     }

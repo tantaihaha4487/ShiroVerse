@@ -1,5 +1,5 @@
 name: ShiroCore
-version: '1.21-1.0.1b'
+version: ${project.version}
 main: net.thanachot.ShiroCore.ShiroCore
 api-version: '1.21'
 load: STARTUP

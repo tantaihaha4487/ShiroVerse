@@ -6,7 +6,7 @@
 
     <groupId>net.thanachot</groupId>
     <artifactId>ShiroVerse</artifactId>
-    <version>1.21-1.0.1b</version>
+    <version>1.21-1.0.1</version>
     <packaging>pom</packaging>
     <modules>
         <module>ShiroCore</module>

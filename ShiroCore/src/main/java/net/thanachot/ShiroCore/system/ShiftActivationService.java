@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Internal service that manages the registration of listenable items and their corresponding handlers.
@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class ShiftActivationService implements ShiftActivation {
 
-    private final Map<Material, ShiftActivationHandler> listenableItems = new HashMap<>();
+    private final Map<Material, ShiftActivationHandler> listenableItems = new ConcurrentHashMap<>();
 
     @Override
     public void register(@NotNull Material material, @NotNull ShiftActivationHandler handler) {

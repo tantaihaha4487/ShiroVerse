@@ -1,15 +1,40 @@
 package net.thanachot.ShiroCore.api;
 
 import net.thanachot.ShiroCore.handler.ShiftActivationHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * The main API for interacting with the ShiroCore shift-activation system.
  */
 public interface ShiftActivation {
+
+    /**
+     * Gets the ShiftActivation API from the Bukkit services manager.
+     *
+     * @return An Optional containing the ShiftActivation API instance if the service is registered, otherwise empty.
+     */
+    @NotNull
+    static Optional<ShiftActivation> get() {
+        RegisteredServiceProvider<ShiftActivation> provider = Bukkit.getServicesManager().getRegistration(ShiftActivation.class);
+        return Optional.ofNullable(provider).map(RegisteredServiceProvider::getProvider);
+    }
+
+    /**
+     * Gets the ShiftActivation API from the Bukkit services manager.
+     *
+     * @return The ShiftActivation API instance.
+     * @throws IllegalStateException if the service is not registered.
+     */
+    @NotNull
+    static ShiftActivation getOrThrow() {
+        return get().orElseThrow(() -> new IllegalStateException("ShiftActivation service not found! Is ShiroCore enabled?"));
+    }
 
     /**
      * Registers a single material to be listened for shift activation.

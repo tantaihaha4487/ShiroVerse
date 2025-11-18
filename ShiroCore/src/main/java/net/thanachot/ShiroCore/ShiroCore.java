@@ -3,6 +3,8 @@ package net.thanachot.ShiroCore;
 import net.thanachot.ShiroCore.api.ShiftActivation;
 import net.thanachot.ShiroCore.listener.ShiftActivationListener;
 import net.thanachot.ShiroCore.system.ShiftActivationService;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,21 +13,10 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public final class ShiroCore extends JavaPlugin {
 
-    private static ShiroCore instance;
     private ShiftActivationService shiftActivationService;
-
-    /**
-     * Gets the singleton instance of the ShiroCore plugin.
-     *
-     * @return The ShiroCore instance.
-     */
-    public static ShiroCore getInstance() {
-        return instance;
-    }
 
     @Override
     public void onEnable() {
-        instance = this;
         shiftActivationService = new ShiftActivationService();
         getServer().getServicesManager().register(ShiftActivation.class, shiftActivationService, this, ServicePriority.Normal);
         getServer().getPluginManager().registerEvents(new ShiftActivationListener(shiftActivationService), this);

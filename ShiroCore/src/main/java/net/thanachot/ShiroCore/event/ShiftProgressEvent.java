@@ -1,7 +1,6 @@
 package net.thanachot.ShiroCore.event;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -15,8 +14,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ShiftProgressEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
-    public record ActionBarData(Component component, String message) {}
-
     private final Player player;
     private final int currentPercentage;
     private final int maxPercentage;
@@ -24,7 +21,6 @@ public class ShiftProgressEvent extends Event implements Cancellable {
     private final ItemStack item;
     private boolean cancelled = false;
     private Component message;
-
     public ShiftProgressEvent(Player player, int currentPercentage, int maxPercentage, EquipmentSlot hand, ItemStack item) {
         this.player = player;
         this.currentPercentage = currentPercentage;
@@ -74,7 +70,6 @@ public class ShiftProgressEvent extends Event implements Cancellable {
         return currentPercentage;
     }
 
-
     /**
      * Gets the maximum percentage.
      */
@@ -100,7 +95,6 @@ public class ShiftProgressEvent extends Event implements Cancellable {
         return message;
     }
 
-
     /**
      * Sets the action bar message that will be displayed to the player.
      *
@@ -113,5 +107,8 @@ public class ShiftProgressEvent extends Event implements Cancellable {
     @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;
+    }
+
+    public record ActionBarData(Component component, String message) {
     }
 }

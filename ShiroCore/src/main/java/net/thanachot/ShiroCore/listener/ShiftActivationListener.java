@@ -1,5 +1,8 @@
 package net.thanachot.ShiroCore.listener;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 import net.thanachot.ShiroCore.event.ShiftActivationEvent;
 import net.thanachot.ShiroCore.event.ShiftProgressEvent;
 import net.thanachot.ShiroCore.handler.ShiftActivationHandler;
@@ -22,6 +25,8 @@ public class ShiftActivationListener implements Listener {
 
     private final PlayerShiftTracker tracker = new PlayerShiftTracker();
     private final ShiftActivationService shiftActivationService;
+
+    private final int MAX_PERCENTAGE = 100;
 
     /**
      * Constructs a new ShiftActivationListener.
@@ -70,10 +75,10 @@ public class ShiftActivationListener implements Listener {
         }
 
         // Activation reached
-        if (percent >= 100) {
+        if (percent >= MAX_PERCENTAGE) {
             ShiftActivationEvent activationEvent = new ShiftActivationEvent(
                     player,
-                    100, // loadingPercentage
+                    MAX_PERCENTAGE,
                     System.currentTimeMillis(), // timestamp
                     hand,
                     item
@@ -97,14 +102,57 @@ public class ShiftActivationListener implements Listener {
         }
 
         // Fire progress event (listeners may override or cancel)
-        ShiftProgressEvent progressEvent = new ShiftProgressEvent(player, percent, hand, item);
+        ShiftProgressEvent progressEvent = new ShiftProgressEvent(player, percent, 100, hand, item);
         Bukkit.getPluginManager().callEvent(progressEvent);
 
         if (!progressEvent.isCancelled()) {
-            String msg = progressEvent.getActionBarMessage();
-            if (msg == null) msg = "Loading: " + percent + "%";
+            Component msg = progressEvent.getActionBarMessage();
+            if (msg == null) msg = getCustomActionbarMessage(percent, MAX_PERCENTAGE);
             player.sendActionBar(msg);
         }
+    }
+
+
+    /**
+     *
+     *
+     */
+    private static Component getCustomActionbarMessage(int current, int max) {
+        double percentage = (max == 0) ? 0 : ((double) current / max) * 100;
+        int rounded = (int) Math.round(percentage);
+        int greenBars = rounded / 10;
+
+        TextComponent.Builder progressBar = Component.text();
+
+        TextColor green = TextColor.fromHexString("#69D84F");
+        TextColor gray = TextColor.fromHexString("#443344");
+
+        if (rounded == 0) {
+            progressBar.append(Component.text("╞══════════╡ 0%").color(gray));
+            return progressBar.build();
+        }
+
+        if (rounded == 100) {
+            progressBar.append(Component.text("╞══════════╡ 100%").color(green));
+            return progressBar.build();
+        }
+
+        progressBar.append(Component.text("╞").color(green));
+
+        for (int i = 0; i < 10; i++) {
+            if (i < greenBars) {
+                progressBar.append(Component.text("═").color(green));
+            } else if (i == greenBars) {
+                progressBar.append(Component.text("▰").color(green));
+            } else {
+                progressBar.append(Component.text("═").color(gray));
+            }
+        }
+
+        progressBar.append(Component.text("╡").color(gray));
+        progressBar.append(Component.text(" " + rounded + "%"));
+
+        return progressBar.build();
     }
 
     private boolean isListenableItem(@NotNull ItemStack item) {

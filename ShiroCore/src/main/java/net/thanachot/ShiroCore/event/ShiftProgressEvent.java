@@ -1,5 +1,7 @@
 package net.thanachot.ShiroCore.event;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -13,17 +15,20 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ShiftProgressEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
+    public record ActionBarData(Component component, String message) {}
 
     private final Player player;
-    private final int loadingPercentage;
+    private final int currentPercentage;
+    private final int maxPercentage;
     private final EquipmentSlot hand;
     private final ItemStack item;
     private boolean cancelled = false;
-    private String message; // null means use default
+    private Component message;
 
-    public ShiftProgressEvent(Player player, int loadingPercentage, EquipmentSlot hand, ItemStack item) {
+    public ShiftProgressEvent(Player player, int currentPercentage, int maxPercentage, EquipmentSlot hand, ItemStack item) {
         this.player = player;
-        this.loadingPercentage = loadingPercentage;
+        this.currentPercentage = currentPercentage;
+        this.maxPercentage = maxPercentage;
         this.hand = hand;
         this.item = item;
     }
@@ -65,8 +70,16 @@ public class ShiftProgressEvent extends Event implements Cancellable {
      *
      * @return The loading percentage.
      */
-    public int getLoadingPercentage() {
-        return loadingPercentage;
+    public int getCurrentPercentage() {
+        return currentPercentage;
+    }
+
+
+    /**
+     * Gets the maximum percentage.
+     */
+    public int getMaxPercentage() {
+        return maxPercentage;
     }
 
     /**
@@ -83,16 +96,17 @@ public class ShiftProgressEvent extends Event implements Cancellable {
      *
      * @return The action bar message.
      */
-    public String getActionBarMessage() {
+    public Component getActionBarMessage() {
         return message;
     }
+
 
     /**
      * Sets the action bar message that will be displayed to the player.
      *
      * @param message The new message.
      */
-    public void setMessage(String message) {
+    public void setMessage(Component message) {
         this.message = message;
     }
 

@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.event;
+package net.thanachot.ShiroCore.api.event;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -15,16 +15,17 @@ import org.jetbrains.annotations.NotNull;
 public class ShiftProgressEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
-    private final int currentPercentage;
-    private final int maxPercentage;
+    private final int currentProgress;
+    private final int maxProgress;
     private final EquipmentSlot hand;
     private final ItemStack item;
     private boolean cancelled = false;
     private Component message;
-    public ShiftProgressEvent(Player player, int currentPercentage, int maxPercentage, EquipmentSlot hand, ItemStack item) {
+
+    public ShiftProgressEvent(Player player, int currentProgress, int maxProgress, EquipmentSlot hand, ItemStack item) {
         this.player = player;
-        this.currentPercentage = currentPercentage;
-        this.maxPercentage = maxPercentage;
+        this.currentProgress = currentProgress;
+        this.maxProgress = maxProgress;
         this.hand = hand;
         this.item = item;
     }
@@ -62,19 +63,33 @@ public class ShiftProgressEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the current loading percentage (0-99).
+     * Gets the current progress.
      *
-     * @return The loading percentage.
+     * @return The current progress.
      */
-    public int getCurrentPercentage() {
-        return currentPercentage;
+    public int getCurrentProgress() {
+        return currentProgress;
     }
 
     /**
-     * Gets the maximum percentage.
+     * Gets the maximum progress required for activation.
+     *
+     * @return The maximum progress.
      */
-    public int getMaxPercentage() {
-        return maxPercentage;
+    public int getMaxProgress() {
+        return maxProgress;
+    }
+
+    /**
+     * Gets the current progress as a percentage.
+     *
+     * @return The progress percentage (0-100).
+     */
+    public int getPercentage() {
+        if (maxProgress <= 0) {
+            return 0;
+        }
+        return (int) Math.round((double) currentProgress / maxProgress * 100.0);
     }
 
     /**

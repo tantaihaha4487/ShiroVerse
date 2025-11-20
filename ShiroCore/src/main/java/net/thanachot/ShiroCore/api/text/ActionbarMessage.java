@@ -6,9 +6,19 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 
+/**
+ * A utility class for creating formatted action bar messages.
+ */
 public class ActionbarMessage {
 
-
+    /**
+     * Creates an alert message with the given content and color.
+     * The format is "(i) [content]".
+     *
+     * @param content The text content of the message.
+     * @param color   The color of the content.
+     * @return A formatted {@link Component} for the action bar.
+     */
     public static Component getAlert(String content, TextColor color) {
         return Component.text()
                 .append(Component.text("(", NamedTextColor.GOLD, TextDecoration.BOLD))
@@ -19,7 +29,15 @@ public class ActionbarMessage {
                 .build();
     }
 
-
+    /**
+     * Creates an alert message with the given content, color, and text decoration.
+     * The format is "(i) [content]".
+     *
+     * @param content        The text content of the message.
+     * @param color          The color of the content.
+     * @param textDecoration The text decoration for the content.
+     * @return A formatted {@link Component} for the action bar.
+     */
     public static Component getAlert(String content, TextColor color, TextDecoration textDecoration) {
         return Component.text()
                 .append(Component.text("(", NamedTextColor.GOLD, TextDecoration.BOLD))
@@ -30,7 +48,13 @@ public class ActionbarMessage {
                 .build();
     }
 
-
+    /**
+     * Creates an alert message with the given component.
+     * The format is "(i) [component]".
+     *
+     * @param component The component to be included in the alert.
+     * @return A formatted {@link Component} for the action bar.
+     */
     public static Component getAlert(Component component) {
         return Component.text()
                 .append(Component.text("(", NamedTextColor.GOLD, TextDecoration.BOLD))
@@ -41,11 +65,18 @@ public class ActionbarMessage {
                 .build();
     }
 
-
+    /**
+     * Creates a loading bar component.
+     * The format is "╞═══▰════╡ 50%".
+     *
+     * @param current The current progress value.
+     * @param max     The maximum progress value.
+     * @return A {@link Component} representing the loading bar.
+     */
     public static Component getLoadingBar(int current, int max) {
         double percentage = (max == 0) ? 0 : ((double) current / max) * 100;
         TextColor filledColor = NamedTextColor.GREEN;
-        TextColor emptyColor = NamedTextColor.BLACK;
+        TextColor emptyColor = NamedTextColor.GRAY;
 
         int rounded = (int) Math.round(percentage);
         int greenBars = rounded / 10;
@@ -58,7 +89,7 @@ public class ActionbarMessage {
             return progressBar.build();
         }
 
-        if (rounded == 100) {
+        if (rounded >= 100) {
             progressBar.append(Component.text("╞══════════╡ 100%").color(filledColor));
             return progressBar.build();
         }
@@ -68,8 +99,6 @@ public class ActionbarMessage {
         for (int i = 0; i < 10; i++) {
             if (i < greenBars) {
                 progressBar.append(Component.text("═").color(filledColor));
-            } else if (i == greenBars) {
-                progressBar.append(Component.text("▰").color(filledColor));
             } else {
                 progressBar.append(Component.text("═").color(emptyColor));
             }

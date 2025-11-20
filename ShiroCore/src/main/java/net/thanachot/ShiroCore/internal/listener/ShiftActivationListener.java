@@ -1,12 +1,12 @@
-package net.thanachot.ShiroCore.listener;
+package net.thanachot.ShiroCore.internal.listener;
 
 import net.kyori.adventure.text.Component;
 import net.thanachot.ShiroCore.api.text.ActionbarMessage;
-import net.thanachot.ShiroCore.event.ShiftActivationEvent;
-import net.thanachot.ShiroCore.event.ShiftProgressEvent;
-import net.thanachot.ShiroCore.handler.ShiftActivationHandler;
-import net.thanachot.ShiroCore.system.ShiftActivationService;
-import net.thanachot.ShiroCore.util.PlayerShiftTracker;
+import net.thanachot.ShiroCore.api.event.ShiftActivationEvent;
+import net.thanachot.ShiroCore.api.event.ShiftProgressEvent;
+import net.thanachot.ShiroCore.internal.handler.ShiftActivationHandler;
+import net.thanachot.ShiroCore.internal.system.ShiftActivationService;
+import net.thanachot.ShiroCore.internal.util.PlayerShiftTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +25,7 @@ public class ShiftActivationListener implements Listener {
     private final PlayerShiftTracker tracker = new PlayerShiftTracker();
     private final ShiftActivationService shiftActivationService;
 
-    private final int MAX_PERCENTAGE = 100;
+    private final int MAX_PROGRESS = 10; // 10 presses to activate
 
     /**
      * Constructs a new ShiftActivationListener.
@@ -66,18 +66,18 @@ public class ShiftActivationListener implements Listener {
             return;
         }
 
-        // Track progress (0..100)
-        int percent = tracker.recordPress(player.getUniqueId());
-        if (percent <= 0) {
+        // Track progress
+        int currentProgress = tracker.recordPress(player.getUniqueId());
+        if (currentProgress <= 0) {
             // either on cooldown or no progress — don't fire progress event
             return;
         }
 
         // Activation reached
-        if (percent >= MAX_PERCENTAGE) {
+        if (currentProgress >= MAX_PROGRESS) {
             ShiftActivationEvent activationEvent = new ShiftActivationEvent(
                     player,
-                    MAX_PERCENTAGE,
+                    MAX_PROGRESS,
                     System.currentTimeMillis(), // timestamp
                     hand,
                     item
@@ -101,12 +101,14 @@ public class ShiftActivationListener implements Listener {
         }
 
         // Fire progress event (listeners may override or cancel)
-        ShiftProgressEvent progressEvent = new ShiftProgressEvent(player, percent, 100, hand, item);
+        ShiftProgressEvent progressEvent = new ShiftProgressEvent(player, currentProgress, MAX_PROGRESS, hand, item);
         Bukkit.getPluginManager().callEvent(progressEvent);
 
         if (!progressEvent.isCancelled()) {
             Component msg = progressEvent.getActionBarMessage();
-            if (msg == null) msg = ActionbarMessage.getLoadingBar(percent, MAX_PERCENTAGE);
+            if (msg == null) {
+                msg = ActionbarMessage.getLoadingBar(progressEvent.getCurrentProgress(), progressEvent.getMaxProgress());
+            }
             player.sendActionBar(msg);
         }
     }

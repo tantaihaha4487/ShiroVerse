@@ -1,8 +1,8 @@
 package net.thanachot.ShiroCore;
 
 import net.thanachot.ShiroCore.api.ShiftActivation;
-import net.thanachot.ShiroCore.listener.ShiftActivationListener;
-import net.thanachot.ShiroCore.system.ShiftActivationService;
+import net.thanachot.ShiroCore.internal.listener.ShiftActivationListener;
+import net.thanachot.ShiroCore.internal.system.ShiftActivationService;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.util;
+package net.thanachot.ShiroCore.internal.util;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

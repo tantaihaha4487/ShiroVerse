@@ -1,7 +1,7 @@
-package net.thanachot.ShiroCore.system;
+package net.thanachot.ShiroCore.internal.system;
 
 import net.thanachot.ShiroCore.api.ShiftActivation;
-import net.thanachot.ShiroCore.handler.ShiftActivationHandler;
+import net.thanachot.ShiroCore.internal.handler.ShiftActivationHandler;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

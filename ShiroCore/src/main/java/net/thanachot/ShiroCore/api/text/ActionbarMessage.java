@@ -74,22 +74,33 @@ public class ActionbarMessage {
      * @return A {@link Component} representing the loading bar.
      */
     public static Component getLoadingBar(int current, int max) {
-        double percentage = (max == 0) ? 0 : ((double) current / max) * 100;
+        float percentage = (max == 0) ? 0 : ((float) current / max) * 100f;
+        return getLoadingBar(percentage);
+    }
+
+    /**
+     * Creates a loading bar component from a percentage.
+     * The format is "╞═══▰════╡ 50%".
+     *
+     * @param percentage The progress percentage.
+     * @return A {@link Component} representing the loading bar.
+     */
+    public static Component getLoadingBar(float percentage) {
         TextColor filledColor = NamedTextColor.GREEN;
         TextColor emptyColor = NamedTextColor.GRAY;
 
         int rounded = (int) Math.round(percentage);
-        int greenBars = rounded / 10;
+        int greenBars = (int) (percentage / 10);
 
         TextComponent.Builder progressBar = Component.text();
 
 
-        if (rounded == 0) {
+        if (percentage <= 0) {
             progressBar.append(Component.text("╞══════════╡ 0%").color(emptyColor));
             return progressBar.build();
         }
 
-        if (rounded >= 100) {
+        if (percentage >= 100) {
             progressBar.append(Component.text("╞══════════╡ 100%").color(filledColor));
             return progressBar.build();
         }

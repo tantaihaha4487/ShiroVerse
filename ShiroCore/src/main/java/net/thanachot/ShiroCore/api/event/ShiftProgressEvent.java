@@ -17,6 +17,7 @@ public class ShiftProgressEvent extends Event implements Cancellable {
     private final Player player;
     private final int currentProgress;
     private final int maxProgress;
+    private final float rawPercentage;
     private final EquipmentSlot hand;
     private final ItemStack item;
     private boolean cancelled = false;
@@ -26,6 +27,7 @@ public class ShiftProgressEvent extends Event implements Cancellable {
         this.player = player;
         this.currentProgress = currentProgress;
         this.maxProgress = maxProgress;
+        this.rawPercentage = (maxProgress <= 0) ? 0 : (float) currentProgress / maxProgress * 100.0f;
         this.hand = hand;
         this.item = item;
     }
@@ -86,10 +88,16 @@ public class ShiftProgressEvent extends Event implements Cancellable {
      * @return The progress percentage (0-100).
      */
     public int getPercentage() {
-        if (maxProgress <= 0) {
-            return 0;
-        }
-        return (int) Math.round((double) currentProgress / maxProgress * 100.0);
+        return (int) Math.round(rawPercentage);
+    }
+
+    /**
+     * Gets the raw progress as a percentage.
+     *
+     * @return The raw progress percentage.
+     */
+    public float getRawPercentage() {
+        return rawPercentage;
     }
 
     /**
@@ -122,8 +130,5 @@ public class ShiftProgressEvent extends Event implements Cancellable {
     @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;
-    }
-
-    public record ActionBarData(Component component, String message) {
     }
 }

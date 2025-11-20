@@ -98,11 +98,6 @@ public class ShiftActivationEvent extends Event implements Cancellable {
     }
 
     @Override
-    public @NotNull String getEventName() {
-        return super.getEventName();
-    }
-
-    @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }

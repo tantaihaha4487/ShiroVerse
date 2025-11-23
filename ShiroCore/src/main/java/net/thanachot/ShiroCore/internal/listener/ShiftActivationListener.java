@@ -27,15 +27,20 @@ public class ShiftActivationListener implements Listener {
 
     private final PlayerShiftTracker tracker = new PlayerShiftTracker();
     private final ShiftActivationService shiftActivationService;
+    private final net.thanachot.ShiroCore.internal.ability.AbilityManagerImpl abilityManager;
 
     /**
      * Constructs a new ShiftActivationListener.
      *
      * @param shiftActivationService The service to use for checking listenable
      *                               items and getting handlers.
+     * @param abilityManager         The ability manager to check for registered
+     *                               abilities
      */
-    public ShiftActivationListener(@NotNull ShiftActivationService shiftActivationService) {
+    public ShiftActivationListener(@NotNull ShiftActivationService shiftActivationService,
+            @NotNull net.thanachot.ShiroCore.internal.ability.AbilityManagerImpl abilityManager) {
         this.shiftActivationService = shiftActivationService;
+        this.abilityManager = abilityManager;
     }
 
     @EventHandler
@@ -138,7 +143,13 @@ public class ShiftActivationListener implements Listener {
     }
 
     private boolean isListenableItem(@NotNull ItemStack item) {
-        return shiftActivationService.isRegistered(item.getType());
+        // Check old system (Material registration)
+        if (shiftActivationService.isRegistered(item.getType())) {
+            return true;
+        }
+
+        // Check new system (AbilityManager)
+        return abilityManager.findAbilityForItem(item).isPresent();
     }
 
     private void applyItemToHand(@NotNull Player player, @NotNull EquipmentSlot hand, @NotNull ItemStack item) {

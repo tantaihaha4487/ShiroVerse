@@ -72,38 +72,137 @@ public class ActionbarMessage {
 
     /**
      * Creates a loading bar component from a percentage.
-     * The format is "╞═══▰════╡ 50%".
+     * The format is "╞═══▰════╡ 50%" with a smooth transition character.
      *
      * @param percentage The progress percentage.
      * @return A {@link Component} representing the loading bar.
      */
     public static Component getLoadingBar(float percentage) {
         TextColor filledColor = NamedTextColor.GREEN;
-        TextColor emptyColor = NamedTextColor.GRAY;
+        TextColor emptyColor = NamedTextColor.BLACK;
 
         int rounded = (int) Math.round(percentage);
-        int greenBars = (int) (percentage / 10);
+        int greenBars = rounded / 10;
 
         TextComponent.Builder progressBar = Component.text();
 
-        if (percentage <= 0) {
+        // Edge case: 0%
+        if (rounded == 0) {
             progressBar.append(Component.text("╞══════════╡ 0%").color(emptyColor));
             return progressBar.build();
         }
 
-        if (percentage >= 100) {
+        // Edge case: 100%
+        if (rounded == 100) {
             progressBar.append(Component.text("╞══════════╡ 100%").color(filledColor));
             return progressBar.build();
         }
 
+        // Opening bracket
         progressBar.append(Component.text("╞").color(filledColor));
 
+        // Progress bar with transition character
         for (int i = 0; i < 10; i++) {
-            progressBar.append(Component.text("═").color(i < greenBars ? filledColor : emptyColor));
+            if (i < greenBars) {
+                // Filled section
+                progressBar.append(Component.text("═").color(filledColor));
+            } else if (i == greenBars) {
+                // Transition character between filled and empty
+                progressBar.append(Component.text("▰").color(filledColor));
+            } else {
+                // Empty section
+                progressBar.append(Component.text("═").color(emptyColor));
+            }
         }
 
+        // Closing bracket and percentage
         progressBar.append(Component.text("╡").color(emptyColor));
         progressBar.append(Component.text(" " + rounded + "%"));
+
+        return progressBar.build();
+    }
+
+    /**
+     * Creates a stylized loading bar with custom colors and enhanced visual design.
+     * The format is "【█▓▒░░░░░░░】 40%".
+     *
+     * @param current     The current progress value.
+     * @param max         The maximum progress value.
+     * @param filledColor The color for filled sections.
+     * @param emptyColor  The color for empty sections.
+     * @return A {@link Component} representing the stylized loading bar.
+     */
+    public static Component getStylizedLoadingBar(int current, int max, TextColor filledColor, TextColor emptyColor) {
+        double percentage = (max == 0) ? 0 : ((double) current / max) * 100;
+        int rounded = (int) Math.round(percentage);
+        int filledBars = rounded / 10;
+
+        TextComponent.Builder progressBar = Component.text();
+
+        // Edge case: 0%
+        if (rounded == 0) {
+            progressBar.append(Component.text("【░░░░░░░░░░】 0%").color(emptyColor));
+            return progressBar.build();
+        }
+
+        // Edge case: 100%
+        if (rounded == 100) {
+            progressBar.append(Component.text("【██████████】 100%").color(filledColor));
+            return progressBar.build();
+        }
+
+        // Opening bracket
+        progressBar.append(Component.text("【").color(filledColor));
+
+        // Multi-level gradient effect: █ ▓ ▒ ░
+        for (int i = 0; i < 10; i++) {
+            if (i < filledBars - 1) {
+                progressBar.append(Component.text("█").color(filledColor));
+            } else if (i == filledBars - 1) {
+                progressBar.append(Component.text("█").color(filledColor));
+            } else if (i == filledBars) {
+                progressBar.append(Component.text("▓").color(filledColor));
+            } else if (i == filledBars + 1) {
+                progressBar.append(Component.text("▒").color(emptyColor));
+            } else {
+                progressBar.append(Component.text("░").color(emptyColor));
+            }
+        }
+
+        // Closing bracket and percentage
+        progressBar.append(Component.text("】").color(emptyColor));
+        progressBar.append(Component.text(" " + rounded + "%"));
+
+        return progressBar.build();
+    }
+
+    /**
+     * Creates a minimalist loading bar with dots.
+     * The format is "●●●●○○○○○○ 40%".
+     *
+     * @param current The current progress value.
+     * @param max     The maximum progress value.
+     * @return A {@link Component} representing the dot-based loading bar.
+     */
+    public static Component getDotLoadingBar(int current, int max) {
+        double percentage = (max == 0) ? 0 : ((double) current / max) * 100;
+        int rounded = (int) Math.round(percentage);
+        int filledDots = rounded / 10;
+
+        TextColor filledColor = NamedTextColor.GREEN;
+        TextColor emptyColor = NamedTextColor.DARK_GRAY;
+
+        TextComponent.Builder progressBar = Component.text();
+
+        for (int i = 0; i < 10; i++) {
+            if (i < filledDots) {
+                progressBar.append(Component.text("●").color(filledColor));
+            } else {
+                progressBar.append(Component.text("○").color(emptyColor));
+            }
+        }
+
+        progressBar.append(Component.text(" " + rounded + "%").color(NamedTextColor.WHITE));
 
         return progressBar.build();
     }

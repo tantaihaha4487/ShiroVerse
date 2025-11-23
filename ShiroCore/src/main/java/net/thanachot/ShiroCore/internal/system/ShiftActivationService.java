@@ -12,7 +12,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Internal service that manages the registration of listenable items and their corresponding handlers.
+ * Internal service that manages the registration of listenable items and their
+ * corresponding handlers.
  * This class is not intended for public use.
  */
 public class ShiftActivationService implements ShiftActivation {
@@ -53,5 +54,17 @@ public class ShiftActivationService implements ShiftActivation {
     @Nullable
     public ShiftActivationHandler getHandler(@NotNull Material material) {
         return listenableItems.get(material);
+    }
+
+    private int maxProgress = 10;
+
+    @Override
+    public void setMaxProgress(int maxProgress) {
+        this.maxProgress = maxProgress;
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return maxProgress;
     }
 }

@@ -16,7 +16,8 @@ public final class ShiroCore extends JavaPlugin {
     @Override
     public void onEnable() {
         shiftActivationService = new ShiftActivationService();
-        getServer().getServicesManager().register(ShiftActivation.class, shiftActivationService, this, ServicePriority.Normal);
+        getServer().getServicesManager().register(ShiftActivation.class, shiftActivationService, this,
+                ServicePriority.Normal);
         getServer().getPluginManager().registerEvents(new ShiftActivationListener(shiftActivationService), this);
     }
 

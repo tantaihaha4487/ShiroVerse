@@ -20,13 +20,7 @@ public class ActionbarMessage {
      * @return A formatted {@link Component} for the action bar.
      */
     public static Component getAlert(String content, TextColor color) {
-        return Component.text()
-                .append(Component.text("(", NamedTextColor.GOLD, TextDecoration.BOLD))
-                .append(Component.text("i", NamedTextColor.RED, TextDecoration.BOLD))
-                .append(Component.text(")", NamedTextColor.GOLD, TextDecoration.BOLD))
-                .append(Component.text(" "))
-                .append(Component.text(content, color))
-                .build();
+        return createAlert(Component.text(content, color));
     }
 
     /**
@@ -39,13 +33,7 @@ public class ActionbarMessage {
      * @return A formatted {@link Component} for the action bar.
      */
     public static Component getAlert(String content, TextColor color, TextDecoration textDecoration) {
-        return Component.text()
-                .append(Component.text("(", NamedTextColor.GOLD, TextDecoration.BOLD))
-                .append(Component.text("i", NamedTextColor.RED, TextDecoration.BOLD))
-                .append(Component.text(")", NamedTextColor.GOLD, TextDecoration.BOLD))
-                .append(Component.text(" "))
-                .append(Component.text(content, color, textDecoration))
-                .build();
+        return createAlert(Component.text(content, color, textDecoration));
     }
 
     /**
@@ -56,12 +44,16 @@ public class ActionbarMessage {
      * @return A formatted {@link Component} for the action bar.
      */
     public static Component getAlert(Component component) {
+        return createAlert(component);
+    }
+
+    private static Component createAlert(Component content) {
         return Component.text()
                 .append(Component.text("(", NamedTextColor.GOLD, TextDecoration.BOLD))
                 .append(Component.text("i", NamedTextColor.RED, TextDecoration.BOLD))
                 .append(Component.text(")", NamedTextColor.GOLD, TextDecoration.BOLD))
                 .append(Component.text(" "))
-                .append(component)
+                .append(content)
                 .build();
     }
 
@@ -94,7 +86,6 @@ public class ActionbarMessage {
 
         TextComponent.Builder progressBar = Component.text();
 
-
         if (percentage <= 0) {
             progressBar.append(Component.text("╞══════════╡ 0%").color(emptyColor));
             return progressBar.build();
@@ -108,11 +99,7 @@ public class ActionbarMessage {
         progressBar.append(Component.text("╞").color(filledColor));
 
         for (int i = 0; i < 10; i++) {
-            if (i < greenBars) {
-                progressBar.append(Component.text("═").color(filledColor));
-            } else {
-                progressBar.append(Component.text("═").color(emptyColor));
-            }
+            progressBar.append(Component.text("═").color(i < greenBars ? filledColor : emptyColor));
         }
 
         progressBar.append(Component.text("╡").color(emptyColor));

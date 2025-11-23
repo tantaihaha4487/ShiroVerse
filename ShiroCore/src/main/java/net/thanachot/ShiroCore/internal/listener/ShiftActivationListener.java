@@ -2,6 +2,7 @@ package net.thanachot.ShiroCore.internal.listener;
 
 import net.kyori.adventure.text.Component;
 import net.thanachot.ShiroCore.api.event.ShiftActivationEvent;
+import net.thanachot.ShiroCore.api.event.ShiftEvent;
 import net.thanachot.ShiroCore.api.event.ShiftProgressEvent;
 import net.thanachot.ShiroCore.api.text.ActionbarMessage;
 import net.thanachot.ShiroCore.internal.handler.ShiftActivationHandler;
@@ -18,29 +19,29 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Internal listener that detects player sneak events and fires the appropriate shift-activation events.
+ * Internal listener that detects player sneak events and fires the appropriate
+ * shift-activation events.
  * This class is not intended for public use.
  */
 public class ShiftActivationListener implements Listener {
 
     private final PlayerShiftTracker tracker = new PlayerShiftTracker();
     private final ShiftActivationService shiftActivationService;
-    private final int maxProgress;
 
     /**
      * Constructs a new ShiftActivationListener.
      *
-     * @param shiftActivationService The service to use for checking listenable items and getting handlers.
-     * @param maxProgress            The number of shift presses required for activation.
+     * @param shiftActivationService The service to use for checking listenable
+     *                               items and getting handlers.
      */
-    public ShiftActivationListener(@NotNull ShiftActivationService shiftActivationService, int maxProgress) {
+    public ShiftActivationListener(@NotNull ShiftActivationService shiftActivationService) {
         this.shiftActivationService = shiftActivationService;
-        this.maxProgress = maxProgress;
     }
 
     @EventHandler
     public void onShift(PlayerToggleSneakEvent event) {
-        if (!event.isSneaking()) return;
+        if (!event.isSneaking())
+            return;
 
         final Player player = event.getPlayer();
         final HandledItem handledItem = getHandledItem(player);
@@ -49,15 +50,16 @@ public class ShiftActivationListener implements Listener {
             return;
         }
 
-        final int currentProgress = tracker.recordPress(player.getUniqueId());
-        if (currentProgress <= 0) {
+        final int currentPressCount = tracker.recordPress(player.getUniqueId());
+        if (currentPressCount <= 0) {
             return; // On cooldown or no progress
         }
 
-        if (currentProgress >= maxProgress) {
+        int maxProgress = shiftActivationService.getMaxProgress();
+        if (currentPressCount >= maxProgress) {
             handleActivation(player, handledItem.hand(), handledItem.item());
         } else {
-            handleProgress(player, currentProgress, handledItem.hand(), handledItem.item());
+            handleProgress(player, currentPressCount, handledItem.hand(), handledItem.item());
         }
     }
 
@@ -65,10 +67,10 @@ public class ShiftActivationListener implements Listener {
      * Handles the final activation when progress is complete.
      */
     private void handleActivation(@NotNull Player player, @NotNull EquipmentSlot hand, @NotNull ItemStack item) {
-        final ShiftActivationEvent activationEvent = new ShiftActivationEvent(player, maxProgress, System.currentTimeMillis(), hand, item);
-        Bukkit.getPluginManager().callEvent(activationEvent);
+        final ShiftActivationEvent activationEvent = new ShiftActivationEvent(player, 100, System.currentTimeMillis(),
+                hand, item);
 
-        if (activationEvent.isCancelled()) {
+        if (!callEvent(activationEvent)) {
             return;
         }
 
@@ -86,11 +88,13 @@ public class ShiftActivationListener implements Listener {
     /**
      * Handles the progress updates before activation is complete.
      */
-    private void handleProgress(@NotNull Player player, int currentProgress, @NotNull EquipmentSlot hand, @NotNull ItemStack item) {
-        final ShiftProgressEvent progressEvent = new ShiftProgressEvent(player, currentProgress, maxProgress, hand, item);
-        Bukkit.getPluginManager().callEvent(progressEvent);
+    private void handleProgress(@NotNull Player player, int currentPressCount, @NotNull EquipmentSlot hand,
+            @NotNull ItemStack item) {
+        int maxProgress = shiftActivationService.getMaxProgress();
+        final ShiftProgressEvent progressEvent = new ShiftProgressEvent(player, currentPressCount, maxProgress, hand,
+                item);
 
-        if (progressEvent.isCancelled()) {
+        if (!callEvent(progressEvent)) {
             return;
         }
 
@@ -102,9 +106,21 @@ public class ShiftActivationListener implements Listener {
     }
 
     /**
+     * Calls an event and returns whether it should proceed (not cancelled).
+     *
+     * @param event The event to call.
+     * @return True if the event is not cancelled, false otherwise.
+     */
+    private boolean callEvent(ShiftEvent event) {
+        Bukkit.getPluginManager().callEvent(event);
+        return !event.isCancelled();
+    }
+
+    /**
      * Determines which hand holds a listenable item.
      *
-     * @return A {@link HandledItem} record if a listenable item is found, otherwise {@code null}.
+     * @return A {@link HandledItem} record if a listenable item is found, otherwise
+     *         {@code null}.
      */
     @Nullable
     private HandledItem getHandledItem(@NotNull Player player) {

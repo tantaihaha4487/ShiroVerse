@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.util;
+package net.thanachot.ShiroCore.internal.util;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PlayerShiftTracker {
 
-    private static final int THRESHOLD = 10;
     private static final long WINDOW_MS = 3000;
     private static final long COOLDOWN_MS = 2000;
 
@@ -20,10 +19,11 @@ public class PlayerShiftTracker {
     private final Map<UUID, Long> lastActivated = new ConcurrentHashMap<>();
 
     /**
-     * Records a shift press for a player and returns the current progress towards activation.
+     * Records a shift press for a player and returns the current number of valid
+     * presses.
      *
      * @param uuid The UUID of the player.
-     * @return The progress percentage (0-100), or 0 if on cooldown.
+     * @return The number of valid presses in the current window.
      */
     public int recordPress(UUID uuid) {
         long now = System.currentTimeMillis();
@@ -42,7 +42,7 @@ public class PlayerShiftTracker {
             deque.pollFirst();
         }
 
-        return Math.min(100, (deque.size() * 100) / THRESHOLD);
+        return deque.size();
     }
 
     /**

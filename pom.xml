@@ -6,7 +6,7 @@
 
     <groupId>net.thanachot</groupId>
     <artifactId>ShiroVerse</artifactId>
-    <version>1.21-1.0.2</version>
+    <version>1.21.10-1.0.3</version>
     <packaging>pom</packaging>
     <modules>
         <module>ShiroCore</module>
@@ -29,7 +29,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper.version>1.21.8-R0.1-SNAPSHOT</paper.version>
+        <paper.version>1.21.10-R0.1-SNAPSHOT</paper.version>
         <server.plugins.folder>${env.HOME}/Minecraft/servers/test-server/plugins/</server.plugins.folder>
     </properties>
 

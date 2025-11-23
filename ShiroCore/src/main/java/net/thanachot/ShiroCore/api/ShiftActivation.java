@@ -1,6 +1,6 @@
 package net.thanachot.ShiroCore.api;
 
-import net.thanachot.ShiroCore.handler.ShiftActivationHandler;
+import net.thanachot.ShiroCore.internal.handler.ShiftActivationHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -17,11 +17,13 @@ public interface ShiftActivation {
     /**
      * Gets the ShiftActivation API from the Bukkit services manager.
      *
-     * @return An Optional containing the ShiftActivation API instance if the service is registered, otherwise empty.
+     * @return An Optional containing the ShiftActivation API instance if the
+     *         service is registered, otherwise empty.
      */
     @NotNull
     static Optional<ShiftActivation> get() {
-        RegisteredServiceProvider<ShiftActivation> provider = Bukkit.getServicesManager().getRegistration(ShiftActivation.class);
+        RegisteredServiceProvider<ShiftActivation> provider = Bukkit.getServicesManager()
+                .getRegistration(ShiftActivation.class);
         return Optional.ofNullable(provider).map(RegisteredServiceProvider::getProvider);
     }
 
@@ -33,7 +35,8 @@ public interface ShiftActivation {
      */
     @NotNull
     static ShiftActivation getOrThrow() {
-        return get().orElseThrow(() -> new IllegalStateException("ShiftActivation service not found! Is ShiroCore enabled?"));
+        return get().orElseThrow(
+                () -> new IllegalStateException("ShiftActivation service not found! Is ShiroCore enabled?"));
     }
 
     /**
@@ -45,9 +48,11 @@ public interface ShiftActivation {
     void register(@NotNull Material material, @NotNull ShiftActivationHandler handler);
 
     /**
-     * Registers multiple materials to be listened for, all sharing the same handler.
+     * Registers multiple materials to be listened for, all sharing the same
+     * handler.
      *
-     * @param handler   The handler to be executed on activation for all specified materials.
+     * @param handler   The handler to be executed on activation for all specified
+     *                  materials.
      * @param materials A list or varargs of materials to register.
      */
     default void register(@NotNull ShiftActivationHandler handler, @NotNull Material... materials) {
@@ -68,4 +73,19 @@ public interface ShiftActivation {
      * @return true if the material is registered, false otherwise.
      */
     boolean isRegistered(@NotNull Material material);
+
+    /**
+     * Sets the number of shift presses required to trigger activation.
+     * Default is usually 10.
+     *
+     * @param maxProgress The number of presses required.
+     */
+    void setMaxProgress(int maxProgress);
+
+    /**
+     * Gets the number of shift presses required to trigger activation.
+     *
+     * @return The number of presses required.
+     */
+    int getMaxProgress();
 }

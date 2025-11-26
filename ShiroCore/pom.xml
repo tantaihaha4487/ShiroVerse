@@ -7,7 +7,7 @@
     <parent>
         <groupId>net.thanachot</groupId>
         <artifactId>ShiroVerse</artifactId>
-        <version>1.21.10-1.0.3</version>
+        <version>1.21.10-2.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.internal.ability;
+package net.thanachot.shirocore.internal.ability;
 
 import net.thanachot.shiroverse.api.ability.ShiftAbility;
 import net.thanachot.shiroverse.api.event.ShiftActivationEvent;
@@ -16,9 +16,9 @@ import java.util.Optional;
  */
 public class AbilityListener implements Listener {
 
-    private final AbilityManagerImpl abilityManager;
+    private final StandardAbilityManager abilityManager;
 
-    public AbilityListener(AbilityManagerImpl abilityManager) {
+    public AbilityListener(StandardAbilityManager abilityManager) {
         this.abilityManager = abilityManager;
     }
 

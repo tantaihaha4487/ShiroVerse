@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.internal.system;
+package net.thanachot.shirocore.internal.system;
 
 import net.thanachot.shiroverse.api.ShiftActivation;
 import net.thanachot.shiroverse.api.handler.ShiftActivationHandler;
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * corresponding handlers.
  * This class is not intended for public use.
  */
-public class ShiftActivationService implements ShiftActivation {
+public class ShiftActivationManager implements ShiftActivation {
 
     private final Map<Material, ShiftActivationHandler> listenableItems = new ConcurrentHashMap<>();
 

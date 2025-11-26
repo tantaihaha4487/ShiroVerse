@@ -1,7 +1,8 @@
 name: ShiroCore
 version: ${project.version}
-main: net.thanachot.ShiroCore.ShiroCore
+main: net.thanachot.shirocore.ShiroCorePlugin
 api-version: '1.21'
+
 load: STARTUP
 provides:
-  - net.thanachot.ShiroCore.api.ShiftActivation
+  - net.thanachot.shiroverse.api.ShiftActivation

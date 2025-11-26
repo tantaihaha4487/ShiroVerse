@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.internal.ability;
+package net.thanachot.shirocore.internal.ability;
 
 import net.thanachot.shiroverse.api.ability.AbilityManager;
 import net.thanachot.shiroverse.api.ability.ShiftAbility;
@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Implementation of the AbilityManager that handles ability registration and
  * activation.
  */
-public class AbilityManagerImpl implements AbilityManager {
+public class StandardAbilityManager implements AbilityManager {
 
     private final Map<String, ShiftAbility> abilities = new ConcurrentHashMap<>();
     private final Map<UUID, String> activeAbilities = new ConcurrentHashMap<>();

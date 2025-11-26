@@ -1,35 +1,34 @@
-package net.thanachot.ShiroCore;
+package net.thanachot.shirocore;
 
 import net.thanachot.shiroverse.api.ShiftActivation;
 import net.thanachot.shiroverse.api.ability.AbilityManager;
-import net.thanachot.ShiroCore.internal.ability.AbilityListener;
-import net.thanachot.ShiroCore.internal.ability.AbilityManagerImpl;
-import net.thanachot.ShiroCore.internal.listener.ShiftActivationListener;
-import net.thanachot.ShiroCore.internal.system.ShiftActivationService;
+import net.thanachot.shirocore.internal.ability.AbilityListener;
+import net.thanachot.shirocore.internal.ability.StandardAbilityManager;
+import net.thanachot.shirocore.internal.listener.ShiftActivationListener;
+import net.thanachot.shirocore.internal.system.ShiftActivationManager;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The main plugin class for ShiroCore.
  */
-public final class ShiroCore extends JavaPlugin {
+public final class ShiroCorePlugin extends JavaPlugin {
 
-    private ShiftActivationService shiftActivationService;
-    private AbilityManagerImpl abilityManager;
+    private ShiftActivationManager shiftActivationManager;
 
     @Override
     public void onEnable() {
         // Initialize Ability system first (needed by ShiftActivationListener)
-        abilityManager = new AbilityManagerImpl();
+        StandardAbilityManager abilityManager = new StandardAbilityManager();
         getServer().getServicesManager().register(AbilityManager.class, abilityManager, this,
                 ServicePriority.Normal);
 
         // Initialize ShiftActivation system (now with ability support)
-        shiftActivationService = new ShiftActivationService();
-        getServer().getServicesManager().register(ShiftActivation.class, shiftActivationService, this,
+        shiftActivationManager = new ShiftActivationManager();
+        getServer().getServicesManager().register(ShiftActivation.class, shiftActivationManager, this,
                 ServicePriority.Normal);
         getServer().getPluginManager()
-                .registerEvents(new ShiftActivationListener(shiftActivationService, abilityManager), this);
+                .registerEvents(new ShiftActivationListener(shiftActivationManager, abilityManager), this);
 
         // Register ability-specific listener
         getServer().getPluginManager().registerEvents(new AbilityListener(abilityManager), this);
@@ -43,11 +42,11 @@ public final class ShiroCore extends JavaPlugin {
     }
 
     /**
-     * Gets the instance of the ShiftActivationService.
+     * Gets the instance of the ShiftActivationManager.
      *
-     * @return The ShiftActivationService instance.
+     * @return The ShiftActivationManager instance.
      */
-    public ShiftActivationService getShiftActivationService() {
-        return shiftActivationService;
+    public ShiftActivationManager getShiftActivationManager() {
+        return shiftActivationManager;
     }
 }

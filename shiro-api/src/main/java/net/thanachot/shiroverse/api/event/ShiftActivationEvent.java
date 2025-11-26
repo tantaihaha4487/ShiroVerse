@@ -12,7 +12,7 @@ public class ShiftActivationEvent extends ShiftEvent {
     private final long timestamp;
 
     public ShiftActivationEvent(Player player, int loadingPercentage, long timestamp, EquipmentSlot hand,
-            ItemStack item) {
+                                ItemStack item) {
         super(player, hand, item);
         this.loadingPercentage = loadingPercentage;
         this.timestamp = timestamp;

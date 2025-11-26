@@ -18,7 +18,7 @@ public interface ShiftActivation {
      * Gets the ShiftActivation API from the Bukkit services manager.
      *
      * @return An Optional containing the ShiftActivation API instance if the
-     *         service is registered, otherwise empty.
+     * service is registered, otherwise empty.
      */
     @NotNull
     static Optional<ShiftActivation> get() {
@@ -75,17 +75,17 @@ public interface ShiftActivation {
     boolean isRegistered(@NotNull Material material);
 
     /**
+     * Gets the number of shift presses required to trigger activation.
+     *
+     * @return The number of presses required.
+     */
+    int getMaxProgress();
+
+    /**
      * Sets the number of shift presses required to trigger activation.
      * Default is usually 10.
      *
      * @param maxProgress The number of presses required.
      */
     void setMaxProgress(int maxProgress);
-
-    /**
-     * Gets the number of shift presses required to trigger activation.
-     *
-     * @return The number of presses required.
-     */
-    int getMaxProgress();
 }

@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.internal.listener;
+package net.thanachot.shirocore.internal.listener;
 
 import net.kyori.adventure.text.Component;
 import net.thanachot.shiroverse.api.event.ShiftActivationEvent;
@@ -6,8 +6,8 @@ import net.thanachot.shiroverse.api.event.ShiftEvent;
 import net.thanachot.shiroverse.api.event.ShiftProgressEvent;
 import net.thanachot.shiroverse.api.text.ActionbarMessage;
 import net.thanachot.shiroverse.api.handler.ShiftActivationHandler;
-import net.thanachot.ShiroCore.internal.system.ShiftActivationService;
-import net.thanachot.ShiroCore.internal.util.PlayerShiftTracker;
+import net.thanachot.shirocore.internal.system.ShiftActivationManager;
+import net.thanachot.shirocore.internal.util.PlayerShiftTracker;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,20 +26,20 @@ import org.jetbrains.annotations.Nullable;
 public class ShiftActivationListener implements Listener {
 
     private final PlayerShiftTracker tracker = new PlayerShiftTracker();
-    private final ShiftActivationService shiftActivationService;
-    private final net.thanachot.ShiroCore.internal.ability.AbilityManagerImpl abilityManager;
+    private final ShiftActivationManager shiftActivationManager;
+    private final net.thanachot.shirocore.internal.ability.StandardAbilityManager abilityManager;
 
     /**
      * Constructs a new ShiftActivationListener.
      *
-     * @param shiftActivationService The service to use for checking listenable
+     * @param shiftActivationManager The manager to use for checking listenable
      *                               items and getting handlers.
      * @param abilityManager         The ability manager to check for registered
      *                               abilities
      */
-    public ShiftActivationListener(@NotNull ShiftActivationService shiftActivationService,
-            @NotNull net.thanachot.ShiroCore.internal.ability.AbilityManagerImpl abilityManager) {
-        this.shiftActivationService = shiftActivationService;
+    public ShiftActivationListener(@NotNull ShiftActivationManager shiftActivationManager,
+            @NotNull net.thanachot.shirocore.internal.ability.StandardAbilityManager abilityManager) {
+        this.shiftActivationManager = shiftActivationManager;
         this.abilityManager = abilityManager;
     }
 
@@ -60,7 +60,7 @@ public class ShiftActivationListener implements Listener {
             return; // On cooldown or no progress
         }
 
-        int maxProgress = shiftActivationService.getMaxProgress();
+        int maxProgress = shiftActivationManager.getMaxProgress();
         if (currentPressCount >= maxProgress) {
             handleActivation(player, handledItem.hand(), handledItem.item(), event);
         } else {
@@ -71,7 +71,8 @@ public class ShiftActivationListener implements Listener {
     /**
      * Handles the final activation when progress is complete.
      */
-    private void handleActivation(@NotNull Player player, @NotNull EquipmentSlot hand, @NotNull ItemStack item, @NotNull PlayerToggleSneakEvent p_event) {
+    private void handleActivation(@NotNull Player player, @NotNull EquipmentSlot hand, @NotNull ItemStack item,
+            @NotNull PlayerToggleSneakEvent p_event) {
         final ShiftActivationEvent activationEvent = new ShiftActivationEvent(player, 100, System.currentTimeMillis(),
                 hand, item);
 
@@ -82,7 +83,7 @@ public class ShiftActivationListener implements Listener {
         final ItemStack newItem = activationEvent.getItem();
         applyItemToHand(player, hand, newItem);
 
-        final ShiftActivationHandler handler = shiftActivationService.getHandler(item.getType());
+        final ShiftActivationHandler handler = shiftActivationManager.getHandler(item.getType());
         if (handler != null) {
             handler.onActivation(player, item, p_event);
         }
@@ -95,7 +96,7 @@ public class ShiftActivationListener implements Listener {
      */
     private void handleProgress(@NotNull Player player, int currentPressCount, @NotNull EquipmentSlot hand,
             @NotNull ItemStack item) {
-        int maxProgress = shiftActivationService.getMaxProgress();
+        int maxProgress = shiftActivationManager.getMaxProgress();
         final ShiftProgressEvent progressEvent = new ShiftProgressEvent(player, currentPressCount, maxProgress, hand,
                 item);
 
@@ -144,7 +145,7 @@ public class ShiftActivationListener implements Listener {
 
     private boolean isListenableItem(@NotNull ItemStack item) {
         // Check old system (Material registration)
-        if (shiftActivationService.isRegistered(item.getType())) {
+        if (shiftActivationManager.isRegistered(item.getType())) {
             return true;
         }
 

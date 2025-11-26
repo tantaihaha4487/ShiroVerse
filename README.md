@@ -6,11 +6,35 @@
 
 # ShiroCore
 
-**ShiroCore** is a powerful library plugin for Minecraft (Spigot/Paper) that provides essential APIs for creating shift-activated abilities and enhanced player interactions. Built for the ShiroVerse project, it simplifies plugin development by offering reusable components and elegant APIs.
+**ShiroCore** is a powerful library plugin for Minecraft (Spigot/Paper) designed to simplify the creation of complex, interactive player abilities. It provides a robust framework for shift-activated skills, complete with progress bars, event handling, and a clean API, allowing developers to focus on building unique gameplay mechanics.
 
 ---
 
-## 🌟 Features
+## 🛠️ Understanding the Components: Engine vs. API
+
+The ShiroVerse project is composed of two key modules that work together: `ShiroCore` (the engine) and `shiro-api` (the developer kit). Understanding their distinct roles is crucial for using the framework effectively.
+
+### **`ShiroCore` — The Engine**
+
+- **What It Is:** The actual Spigot/Paper plugin that you install on your Minecraft server. It's the heart of the system.
+- **What It Does:** It contains all the core logic for detecting player actions (like shift-spamming), managing ability states, handling cooldowns, and displaying visual feedback like action bar progress bars.
+- **Who It's For:**
+    - **Server Owners:** You install this single plugin in your `plugins` folder. It's the powerhouse that makes all dependent plugins work.
+    - **Developers:** Your plugins require `ShiroCore` to be present on the server to function. It's the runtime environment for your creations.
+
+### **`shiro-api` — The Developer Kit**
+
+- **What It Is:** A lightweight Java library (`.jar`) that developers use to write their own plugins that integrate with `ShiroCore`.
+- **What It Does:** It provides a clean and simple API to register custom abilities, listen to events, and control the activation system without needing to access the complex internal code of the engine. Key components include:
+    - `AbilityManager`: For registering and managing your custom abilities.
+    - `ShiftAbility`: An abstract class you extend to create your own shift-activated skills quickly.
+    - `ActionbarMessage`: A utility for creating stylish progress bars and alerts.
+- **Who It's For:**
+    - **Developers:** You include `shiro-api` as a dependency in your plugin's `pom.xml` (or other build system). It is your toolbox for building new gameplay features on top of the ShiroCore engine.
+
+---
+
+## 🌟 Core Features
 
 ### **1. Shift Activation System**
 Create abilities that activate through rapid shift-key spamming (configurable threshold).

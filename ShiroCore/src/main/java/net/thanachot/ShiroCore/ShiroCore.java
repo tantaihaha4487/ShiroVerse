@@ -1,7 +1,7 @@
 package net.thanachot.ShiroCore;
 
-import net.thanachot.ShiroCore.api.ShiftActivation;
-import net.thanachot.ShiroCore.api.ability.AbilityManager;
+import net.thanachot.shiroverse.api.ShiftActivation;
+import net.thanachot.shiroverse.api.ability.AbilityManager;
 import net.thanachot.ShiroCore.internal.ability.AbilityListener;
 import net.thanachot.ShiroCore.internal.ability.AbilityManagerImpl;
 import net.thanachot.ShiroCore.internal.listener.ShiftActivationListener;

@@ -1,7 +1,7 @@
 package net.thanachot.ShiroCore.internal.ability;
 
-import net.thanachot.ShiroCore.api.ability.AbilityManager;
-import net.thanachot.ShiroCore.api.ability.ShiftAbility;
+import net.thanachot.shiroverse.api.ability.AbilityManager;
+import net.thanachot.shiroverse.api.ability.ShiftAbility;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.api.ability;
+package net.thanachot.shiroverse.api.ability;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

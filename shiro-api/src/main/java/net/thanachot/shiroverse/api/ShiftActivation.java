@@ -1,6 +1,6 @@
-package net.thanachot.ShiroCore.api;
+package net.thanachot.shiroverse.api;
 
-import net.thanachot.ShiroCore.internal.handler.ShiftActivationHandler;
+import net.thanachot.shiroverse.api.handler.ShiftActivationHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;

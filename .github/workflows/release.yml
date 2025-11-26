@@ -10,7 +10,6 @@ permissions:
 
 env:
   PROJECT_NAME: ShiroVerse
-  MODULE_NAME: ShiroCore
 
 jobs:
   release:
@@ -52,6 +51,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.MODULE_NAME }}/target/${{ env.MODULE_NAME }}-${{ steps.get_version.outputs.version }}.jar
-          asset_name: ${{ env.MODULE_NAME }}-${{ steps.get_version.outputs.version }}.jar
+          asset_path: ShiroCore/target/ShiroCore-${{ steps.get_version.outputs.version }}.jar
+          asset_name: ShiroCore-${{ steps.get_version.outputs.version }}.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload shiro-api JAR
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: shiro-api/target/shiro-api-${{ steps.get_version.outputs.version }}.jar
+          asset_name: shiro-api-${{ steps.get_version.outputs.version }}.jar
           asset_content_type: application/java-archive

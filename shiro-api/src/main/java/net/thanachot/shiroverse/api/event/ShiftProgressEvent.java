@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.api.event;
+package net.thanachot.shiroverse.api.event;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;

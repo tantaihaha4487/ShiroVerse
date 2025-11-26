@@ -1,8 +1,8 @@
 package net.thanachot.ShiroCore.internal.ability;
 
-import net.thanachot.ShiroCore.api.ability.ShiftAbility;
-import net.thanachot.ShiroCore.api.event.ShiftActivationEvent;
-import net.thanachot.ShiroCore.api.event.ShiftProgressEvent;
+import net.thanachot.shiroverse.api.ability.ShiftAbility;
+import net.thanachot.shiroverse.api.event.ShiftActivationEvent;
+import net.thanachot.shiroverse.api.event.ShiftProgressEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

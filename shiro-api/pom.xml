@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>net.thanachot</groupId>
         <artifactId>ShiroVerse</artifactId>
         <version>1.21.10-1.0.3</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ShiroCore</artifactId>
-    <packaging>jar</packaging>
-    <name>Shiro Core (plugin)</name>
+    <artifactId>shiro-api</artifactId>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -22,20 +24,8 @@
             <version>${paper.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>net.thanachot</groupId>
-            <artifactId>shiro-api</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
-
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
@@ -71,26 +61,6 @@
                             </relocations>
                             -->
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <!--suppress UnresolvedMavenProperty -->
-                                <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      tofile="${server.plugins.folder}/${project.build.finalName}.jar"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

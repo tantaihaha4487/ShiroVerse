@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.api.text;
+package net.thanachot.shiroverse.api.text;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;

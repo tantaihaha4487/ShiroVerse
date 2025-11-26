@@ -1,6 +1,6 @@
 package net.thanachot.ShiroCore.internal.handler;
 
-import net.thanachot.ShiroCore.api.event.ShiftActivationEvent;
+import net.thanachot.shiroverse.api.event.ShiftActivationEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**

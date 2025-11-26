@@ -1,11 +1,11 @@
 package net.thanachot.ShiroCore.internal.listener;
 
 import net.kyori.adventure.text.Component;
-import net.thanachot.ShiroCore.api.event.ShiftActivationEvent;
-import net.thanachot.ShiroCore.api.event.ShiftEvent;
-import net.thanachot.ShiroCore.api.event.ShiftProgressEvent;
-import net.thanachot.ShiroCore.api.text.ActionbarMessage;
-import net.thanachot.ShiroCore.internal.handler.ShiftActivationHandler;
+import net.thanachot.shiroverse.api.event.ShiftActivationEvent;
+import net.thanachot.shiroverse.api.event.ShiftEvent;
+import net.thanachot.shiroverse.api.event.ShiftProgressEvent;
+import net.thanachot.shiroverse.api.text.ActionbarMessage;
+import net.thanachot.shiroverse.api.handler.ShiftActivationHandler;
 import net.thanachot.ShiroCore.internal.system.ShiftActivationService;
 import net.thanachot.ShiroCore.internal.util.PlayerShiftTracker;
 import org.bukkit.Bukkit;
@@ -62,7 +62,7 @@ public class ShiftActivationListener implements Listener {
 
         int maxProgress = shiftActivationService.getMaxProgress();
         if (currentPressCount >= maxProgress) {
-            handleActivation(player, handledItem.hand(), handledItem.item());
+            handleActivation(player, handledItem.hand(), handledItem.item(), event);
         } else {
             handleProgress(player, currentPressCount, handledItem.hand(), handledItem.item());
         }
@@ -71,7 +71,7 @@ public class ShiftActivationListener implements Listener {
     /**
      * Handles the final activation when progress is complete.
      */
-    private void handleActivation(@NotNull Player player, @NotNull EquipmentSlot hand, @NotNull ItemStack item) {
+    private void handleActivation(@NotNull Player player, @NotNull EquipmentSlot hand, @NotNull ItemStack item, @NotNull PlayerToggleSneakEvent p_event) {
         final ShiftActivationEvent activationEvent = new ShiftActivationEvent(player, 100, System.currentTimeMillis(),
                 hand, item);
 
@@ -84,7 +84,7 @@ public class ShiftActivationListener implements Listener {
 
         final ShiftActivationHandler handler = shiftActivationService.getHandler(item.getType());
         if (handler != null) {
-            handler.onActivate(activationEvent);
+            handler.onActivation(player, item, p_event);
         }
 
         tracker.reset(player.getUniqueId());

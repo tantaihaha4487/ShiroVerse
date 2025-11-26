@@ -1,4 +1,4 @@
-package net.thanachot.ShiroCore.api.event;
+package net.thanachot.shiroverse.api.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;

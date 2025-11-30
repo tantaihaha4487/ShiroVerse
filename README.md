@@ -83,9 +83,9 @@ Add to your `pom.xml`:
 
 <dependencies>
     <dependency>
-        <groupId>com.github.tantaihaha4487</groupId>
-        <artifactId>ShiroCore</artifactId>
-        <version>1.21-SNAPSHOT</version>
+        <groupId>com.github.tantaihaha4487.ShiroVerse</groupId>
+        <artifactId>shiro-api</artifactId>
+        <version>v1.21.10-2.0.0</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>

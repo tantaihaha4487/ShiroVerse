@@ -4,5 +4,3 @@ main: net.thanachot.shirocore.ShiroCorePlugin
 api-version: '1.21'
 
 load: STARTUP
-provides:
-  - net.thanachot.shiroverse.api.ShiftActivation

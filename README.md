@@ -29,6 +29,7 @@ The ShiroVerse project is composed of two key modules that work together: `Shiro
     - `AbilityManager`: For registering and managing your custom abilities.
     - `ShiftAbility`: An abstract class you extend to create your own shift-activated skills quickly.
     - `ActionbarMessage`: A utility for creating stylish progress bars and alerts.
+    - `DependencyLogger`: A utility for professional, consistent dependency error logging.
 - **Who It's For:**
     - **Developers:** You include `shiro-api` as a dependency in your plugin's `pom.xml` (or other build system). It is your toolbox for building new gameplay features on top of the ShiroCore engine.
 
@@ -59,6 +60,14 @@ Create stylish action bar messages with multiple design options.
 - 🔤 **Mini-Font Support** - Small, clean text rendering
 - 🌈 **Custom Colors** - Full color customization
 - ⚡ **Alert Messages** - Pre-formatted alert system
+
+### **4. Dependency Logger**
+Professional, consistent dependency error messaging for your plugins.
+
+- 📦 **Standardized Messages** - Beautiful bordered error boxes
+- 🎯 **Version Checking** - Built-in version mismatch warnings
+- 🔗 **Helpful Links** - Automatic ShiroCore download links
+- ♻️ **Reusable** - Use across all your ShiroCore-dependent plugins
 
 ---
 
@@ -195,6 +204,80 @@ Component alert = ActionbarMessage.getAlert("Warning!", NamedTextColor.RED);
 
 ---
 
+### **Example 3: Dependency Checking**
+
+```java
+import net.thanachot.shiroverse.api.util.DependencyLogger;
+import org.bukkit.plugin.Plugin;
+
+public class MyPlugin extends JavaPlugin {
+    
+    private static final String REQUIRED_SHIROCORE_VERSION = "2.0.0";
+    
+    @Override
+    public void onEnable() {
+        if (!checkShiroCore()) {
+            // Plugin will continue but without ShiroCore features
+            return;
+        }
+        
+        // Initialize ShiroCore features
+        initializeAbilities();
+    }
+    
+    private boolean checkShiroCore() {
+        Plugin shiroCore = getServer().getPluginManager().getPlugin("ShiroCore");
+        
+        if (shiroCore == null) {
+            logShiroCoreNotFound();
+            return false;
+        }
+        
+        String version = shiroCore.getPluginMeta().getVersion();
+        if (!version.contains(REQUIRED_SHIROCORE_VERSION)) {
+            logIncompatibleVersion(version);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void logShiroCoreNotFound() {
+        try {
+            DependencyLogger.logShiroCoreNotFound(
+                getLogger(),
+                "MyPlugin",
+                REQUIRED_SHIROCORE_VERSION
+            );
+        } catch (NoClassDefFoundError e) {
+            getLogger().warning("ShiroCore NOT FOUND! MyPlugin requires ShiroCore v" 
+                + REQUIRED_SHIROCORE_VERSION + "+");
+        }
+    }
+    
+    private void logIncompatibleVersion(String foundVersion) {
+        try {
+            DependencyLogger.logIncompatibleVersion(
+                getLogger(),
+                foundVersion,
+                REQUIRED_SHIROCORE_VERSION
+            );
+        } catch (NoClassDefFoundError e) {
+            getLogger().warning("INCOMPATIBLE ShiroCore VERSION! Found: " 
+                + foundVersion + ", Required: v" + REQUIRED_SHIROCORE_VERSION + "+");
+        }
+    }
+}
+```
+
+**Benefits:**
+- ✅ Professional, consistent error messages
+- ✅ Clear instructions for server admins
+- ✅ Graceful degradation if DependencyLogger unavailable
+- ✅ Reusable across all your plugins
+
+---
+
 ## 📚 API Documentation
 
 ### **AbilityManager**
@@ -259,6 +342,64 @@ public void onShiftActivation(ShiftActivationEvent event) {
 }
 ```
 
+### **DependencyLogger**
+
+```java
+import net.thanachot.shiroverse.api.util.DependencyLogger;
+
+// Log when ShiroCore is not found
+DependencyLogger.logShiroCoreNotFound(
+    getLogger(),
+    "YourPlugin",      // Your plugin name
+    "2.0.0"            // Required ShiroCore version
+);
+
+// Log when ShiroCore version is incompatible
+DependencyLogger.logIncompatibleVersion(
+    getLogger(),
+    "1.0.0",          // Found version
+    "2.0.0"           // Required version
+);
+
+// Log custom dependency errors
+DependencyLogger.logDependencyError(
+    getLogger(),
+    "DEPENDENCY ERROR!",
+    "ShiroCore API is required.",
+    "Please install ShiroCore v2.0.0+"
+);
+
+// Get ShiroCore download URL
+String url = DependencyLogger.getShiroCoreUrl();
+```
+
+**Output Example:**
+```
+╔════════════════════════════════════════════════════════════╗
+║  ShiroCore NOT FOUND!                                      ║
+║  YourPlugin requires ShiroCore v2.0.0+                     ║
+║  for abilities to work.                                    ║
+║                                                            ║
+║  The plugin will continue without ability features.        ║
+║                                                            ║
+║  Download ShiroCore from:                                  ║
+║  → https://modrinth.com/plugin/shirocore                   ║
+╚════════════════════════════════════════════════════════════╝
+```
+
+**Best Practice - Use with try-catch:**
+```java
+private void checkDependencies() {
+    try {
+        DependencyLogger.logShiroCoreNotFound(
+            getLogger(), "MyPlugin", "2.0.0"
+        );
+    } catch (NoClassDefFoundError e) {
+        // Fallback if DependencyLogger isn't available
+        getLogger().warning("ShiroCore required!");
+    }
+}
+
 ---
 
 ## 🎨 Action Bar Styles
@@ -314,6 +455,8 @@ ShiroCore
 │   │   └── ShiftEvent.java
 │   ├── text/
 │   │   └── ActionbarMessage.java
+│   ├── util/
+│   │   └── DependencyLogger.java      (Dependency logging)
 │   └── ShiftActivation.java
 └── internal/
     ├── ability/

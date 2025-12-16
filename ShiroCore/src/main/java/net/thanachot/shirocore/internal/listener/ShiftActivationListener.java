@@ -144,6 +144,11 @@ public class ShiftActivationListener implements Listener {
     }
 
     private boolean isListenableItem(@NotNull ItemStack item) {
+        // Optimization: Early return for empty/air items
+        if (item.getType().isAir()) {
+            return false;
+        }
+
         // Check old system (Material registration)
         if (shiftActivationManager.isRegistered(item.getType())) {
             return true;

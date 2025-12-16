@@ -97,8 +97,13 @@ public class StandardAbilityManager implements AbilityManager {
      */
     @NotNull
     public Optional<ShiftAbility> findAbilityForItem(@NotNull ItemStack item) {
-        return abilities.values().stream()
-                .filter(ability -> ability.canUse(item))
-                .findFirst();
+        // Optimization: Replace Stream API with for-loop for hot path performance
+        // This method is called frequently (e.g., on sneak toggle)
+        for (ShiftAbility ability : abilities.values()) {
+            if (ability.canUse(item)) {
+                return Optional.of(ability);
+            }
+        }
+        return Optional.empty();
     }
 }
